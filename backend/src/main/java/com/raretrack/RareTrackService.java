@@ -17,11 +17,12 @@ public class RareTrackService {
     private final ListingRepository listingRepo;
     private final BidRepository bidRepo;
     private final PriceHistoryRepository priceRepo;
+    private final StockTransactionRepository stockRepo;
 
     public RareTrackService(UserRepository userRepo, ItemRepository itemRepo, ListingRepository listingRepo,
-                            BidRepository bidRepo, PriceHistoryRepository priceRepo) {
+                            BidRepository bidRepo, PriceHistoryRepository priceRepo, StockTransactionRepository stockRepo) {
         this.userRepo = userRepo; this.itemRepo = itemRepo; this.listingRepo = listingRepo;
-        this.bidRepo = bidRepo; this.priceRepo = priceRepo;
+        this.bidRepo = bidRepo; this.priceRepo = priceRepo; this.stockRepo = stockRepo;
     }
 
     // AUTH
@@ -32,23 +33,58 @@ public class RareTrackService {
         return new AuthResponse(user.getId(), user.getUsername(), user.getEmail(), user.getFullName(), user.getRole(), "mock-jwt-" + user.getId());
     }
 
+    public AuthResponse register(AuthRequest req) {
+        if (userRepo.existsByUsername(req.getUsername())) throw new InvalidBidException("Username is taken");
+        User user = userRepo.save(new User(
+                req.getUsername(),
+                req.getEmail() != null ? req.getEmail() : req.getUsername() + "@raretrack.com",
+                req.getPassword(),
+                req.getFullName() != null ? req.getFullName() : req.getUsername(),
+                req.getRole() != null ? req.getRole() : Role.BUYER
+        ));
+        return new AuthResponse(user.getId(), user.getUsername(), user.getEmail(), user.getFullName(), user.getRole(), "mock-jwt-" + user.getId());
+    }
+
     public List<User> getAllUsers() { return userRepo.findAll(); }
+    public void deleteUser(Long id) { userRepo.deleteById(id); }
 
     // ITEMS
+    public List<Item> searchItems(String q, String r) {
+        String query = (q != null && !q.isBlank()) ? q.trim() : null;
+        String rarity = (r != null && !r.isBlank() && !r.equalsIgnoreCase("ALL")) ? r.trim() : null;
+        return itemRepo.searchItems(query, rarity);
+    }
+
     public Item getItemById(Long id) {
         return itemRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Item not found: " + id));
     }
 
+    @Transactional
     public Item createItem(ItemRequest req) {
-        return itemRepo.save(new Item(req.getName(), req.getDescription(), req.getCondition(),
+        Item item = itemRepo.save(new Item(req.getName(), req.getDescription(), req.getCondition(),
                 req.getRarityLevel(), req.getPartNumber(), req.getStockQty()));
+        stockRepo.save(new StockTransaction(item, StockTransaction.Type.IN, item.getStockQty(), "Initial intake"));
+        return item;
     }
+
+    public Item updateItem(Long id, ItemRequest req) {
+        Item item = getItemById(id);
+        item.setName(req.getName()); item.setDescription(req.getDescription());
+        item.setCondition(req.getCondition()); item.setRarityLevel(req.getRarityLevel()); item.setPartNumber(req.getPartNumber());
+        item.setStockQty(req.getStockQty());
+        return itemRepo.save(item);
+    }
+
+    public void deleteItem(Long id) { itemRepo.deleteById(id); }
+    public List<Item> getLowStockItems(Integer threshold) { return itemRepo.findByStockQtyLessThanEqual(threshold != null ? threshold : 2); }
 
     // LISTINGS & SELLER COMPARISON
     public List<Listing> getAllActiveListings() { return listingRepo.findByStatus(ListingStatus.ACTIVE); }
     public Listing getListingById(Long id) {
         return listingRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Listing not found: " + id));
     }
+    public List<Listing> getListingsByItemId(Long itemId) { return listingRepo.findByItemId(itemId); }
+    public List<Listing> getListingsBySellerId(Long sellerId) { return listingRepo.findBySellerId(sellerId); }
 
     @Transactional
     public Listing createListing(ListingRequest req) {
@@ -74,8 +110,15 @@ public class RareTrackService {
 
         item.setStockQty(item.getStockQty() - 1);
         itemRepo.save(item);
+        stockRepo.save(new StockTransaction(item, StockTransaction.Type.SOLD, 1, "Purchased by buyer " + buyerId));
 
         listing.setStatus(ListingStatus.SOLD);
+        return listingRepo.save(listing);
+    }
+
+    public Listing closeListing(Long id) {
+        Listing listing = getListingById(id);
+        listing.setStatus(ListingStatus.EXPIRED);
         return listingRepo.save(listing);
     }
 

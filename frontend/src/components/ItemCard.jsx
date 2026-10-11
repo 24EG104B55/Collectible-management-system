@@ -24,14 +24,7 @@ export default function ItemCard({ listing, onSelect }) {
         </span>
       </div>
 
-      {/* Item Identification */}
-      <div style={{ marginBottom: '6px' }}>
-        <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>
-          SKU: {item.partNumber} • {item.condition} • {item.rarityLevel}
-        </span>
-      </div>
-
-      <h3 style={{ fontSize: '1.1rem', color: '#0f172a', marginBottom: '8px', lineHeight: 1.35 }}>
+      <h3 style={{ fontSize: '1.15rem', color: '#0f172a', marginBottom: '8px', lineHeight: 1.35 }}>
         {item.name}
       </h3>
 

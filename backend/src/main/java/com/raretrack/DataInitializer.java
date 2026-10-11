@@ -13,11 +13,12 @@ public class DataInitializer implements CommandLineRunner {
     private final ListingRepository listingRepo;
     private final BidRepository bidRepo;
     private final PriceHistoryRepository priceRepo;
+    private final StockTransactionRepository stockRepo;
 
     public DataInitializer(UserRepository userRepo, ItemRepository itemRepo, ListingRepository listingRepo,
-                           BidRepository bidRepo, PriceHistoryRepository priceRepo) {
+                           BidRepository bidRepo, PriceHistoryRepository priceRepo, StockTransactionRepository stockRepo) {
         this.userRepo = userRepo; this.itemRepo = itemRepo; this.listingRepo = listingRepo;
-        this.bidRepo = bidRepo; this.priceRepo = priceRepo;
+        this.bidRepo = bidRepo; this.priceRepo = priceRepo; this.stockRepo = stockRepo;
     }
 
     @Override
@@ -34,6 +35,9 @@ public class DataInitializer implements CommandLineRunner {
         Item item2 = itemRepo.save(new Item("Intel 8086 Gold Ceramic CPU (1978)", "Rare purple ceramic gold lid 16-bit microprocessor.", "NOS / Mint", "Ultra-Rare", "CPU-I8086-CERAMIC-01", 4));
         Item item3 = itemRepo.save(new Item("1923 Western Electric Brass Rotary Desk Phone", "Solid brass candlestick desk phone with rotary dial.", "Used / Excellent", "Rare", "TEL-WE102-BRASS-1923", 3));
 
+        stockRepo.save(new StockTransaction(item1, StockTransaction.Type.IN, 2, "Initial intake"));
+        stockRepo.save(new StockTransaction(item2, StockTransaction.Type.IN, 4, "Initial intake"));
+        stockRepo.save(new StockTransaction(item3, StockTransaction.Type.IN, 3, "Initial intake"));
 
         Listing listing1 = listingRepo.save(new Listing(item1, seller1, ListingType.AUCTION, 1450.0, 1200.0, LocalDateTime.now().plusDays(4)));
         Listing listing2 = listingRepo.save(new Listing(item1, seller2, ListingType.FIXED_PRICE, 1590.0, null, null));

@@ -198,3 +198,38 @@ class PriceHistory {
     public LocalDateTime getRecordedAt() { return recordedAt; }
     public void setRecordedAt(LocalDateTime recordedAt) { this.recordedAt = recordedAt; }
 }
+
+@Entity
+@Table(name = "stock_transactions")
+class StockTransaction {
+    public enum Type { IN, OUT, SOLD }
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+    @Enumerated(EnumType.STRING)
+    private Type type;
+    @Column(nullable = false)
+    private Integer quantity;
+    private String reason;
+    private LocalDateTime transactionDate = LocalDateTime.now();
+
+    public StockTransaction() {}
+    public StockTransaction(Item item, Type type, Integer quantity, String reason) {
+        this.item = item; this.type = type; this.quantity = quantity; this.reason = reason;
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Item getItem() { return item; }
+    public void setItem(Item item) { this.item = item; }
+    public Type getType() { return type; }
+    public void setType(Type type) { this.type = type; }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
+    public LocalDateTime getTransactionDate() { return transactionDate; }
+    public void setTransactionDate(LocalDateTime transactionDate) { this.transactionDate = transactionDate; }
+}

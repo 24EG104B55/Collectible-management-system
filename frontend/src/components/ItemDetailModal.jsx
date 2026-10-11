@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ListingService } from './api';
+import { ListingService } from '../services/api';
 import PriceChart from './PriceChart';
 import SellerComparisonTable from './SellerComparisonTable';
 
@@ -158,9 +158,7 @@ export default function ItemDetailModal({ listing, onClose, currentUser, onRefre
                   </div>
                 </div>
                 <div>
-                  <span className={isAuction ? 'badge badge-auction' : 'badge badge-fixed'}>
-                    {isAuction ? '⏱️ Live Auction' : '⚡ Direct Buy'}
-                  </span>
+                    <span style={{ fontSize: '0.78rem', color: '#64748b' }}>{isAuction ? '⏱️ Live Auction' : '⚡ Direct Buy'}</span>
                 </div>
               </div>
 
@@ -180,7 +178,7 @@ export default function ItemDetailModal({ listing, onClose, currentUser, onRefre
                   color: '#92400e',
                   fontWeight: 500
                 }}>
-                  ⏳ Auction closes {new Date(currentListing.auctionEndTime).toLocaleString()}
+                  ⏳ Auction closes in approximately 4 days
                 </div>
               )}
             </div>
@@ -196,9 +194,9 @@ export default function ItemDetailModal({ listing, onClose, currentUser, onRefre
               justifyContent: 'space-between'
             }}>
               <div>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
-                  <span className="badge badge-rare">Condition: {item.condition}</span>
-                  <span className="badge badge-legendary">Rarity: {item.rarityLevel}</span>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 600 }}>Condition: {item.condition}</span>
+                  <span style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 600 }}>• Rarity: {item.rarityLevel}</span>
                   <span style={{
                     fontSize: '0.75rem',
                     padding: '4px 8px',

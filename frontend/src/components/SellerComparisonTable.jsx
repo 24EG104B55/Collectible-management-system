@@ -98,8 +98,8 @@ export default function SellerComparisonTable({ comparisons = [], onSelectListin
                   </td>
 
                   <td style={{ padding: '12px 16px' }}>
-                    <span className={c.listingType === 'AUCTION' ? 'badge badge-auction' : 'badge badge-fixed'}>
-                      {c.listingType === 'AUCTION' ? 'Auction' : 'Buy Now'}
+                    <span style={{ fontSize: '0.82rem', color: '#475569', fontWeight: 600 }}>
+                      {c.listingType === 'AUCTION' ? '⏱️ Auction' : '⚡ Buy Now'}
                     </span>
                   </td>
 
@@ -121,8 +121,8 @@ export default function SellerComparisonTable({ comparisons = [], onSelectListin
 
                   <td style={{ padding: '12px 16px' }}>
                     {c.bestPrice ? (
-                      <span className="badge-best-deal">
-                        ⭐ BEST PRICE
+                      <span style={{ color: '#059669', fontWeight: 700, fontSize: '0.8rem' }}>
+                        ⭐ Lowest Price
                       </span>
                     ) : (
                       <span style={{ color: '#dc2626', fontSize: '0.8rem', fontWeight: 600 }}>

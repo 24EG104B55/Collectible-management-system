@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ItemService, ListingService } from './api';
+import { ItemService, ListingService } from '../services/api';
 
 export default function SellerModal({ onClose, currentUser, onListingCreated }) {
   const [formData, setFormData] = useState({

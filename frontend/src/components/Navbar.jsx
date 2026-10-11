@@ -26,28 +26,11 @@ export default function Navbar({
         gap: '20px'
       }}>
         {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #0284c7, #0369a1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: 800,
-            fontSize: '1.2rem',
-            boxShadow: '0 2px 8px rgba(2, 132, 199, 0.25)'
-          }}>
-            S
+        <div>
+          <div style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#0f172a' }}>
+            Store
           </div>
-          <div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#0f172a' }}>
-              Store
-            </div>
-            <p style={{ fontSize: '0.75rem', color: '#64748b' }}>Collectible Items Management System</p>
-          </div>
+          <p style={{ fontSize: '0.75rem', color: '#64748b' }}>Collectible Items Management System</p>
         </div>
 
         {/* Search Bar */}
