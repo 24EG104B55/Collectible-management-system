@@ -15,6 +15,16 @@ public class RareTrackController {
 
     public RareTrackController(RareTrackService service) { this.service = service; }
 
+    @GetMapping("/")
+    public ResponseEntity<String> root() {
+        return ResponseEntity.ok("Collectible Items Management System API is running!");
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("OK");
+    }
+
     // AUTH
     @PostMapping("/auth/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest req) { return ResponseEntity.ok(service.login(req)); }
