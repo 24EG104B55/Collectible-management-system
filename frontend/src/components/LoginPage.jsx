@@ -212,35 +212,6 @@ export default function LoginPage({ onLogin }) {
             {loading ? (isRegister ? 'Creating Account...' : 'Signing in...') : (isRegister ? 'Create Account & Enter' : 'Sign In')}
           </button>
         </form>
-
-        <div style={{
-          marginTop: '24px',
-          paddingTop: '18px',
-          borderTop: '1px solid #f1f5f9',
-          fontSize: '0.75rem',
-          color: '#94a3b8'
-        }}>
-          <div style={{ fontWeight: 600, color: '#64748b', marginBottom: '6px' }}>Demo Accounts</div>
-          <div style={{ display: 'grid', gap: '3px' }}>
-            {[
-              ['admin', 'admin123', 'Admin'],
-              ['vintage_vault', 'seller123', 'Seller'],
-              ['collector_dan', 'buyer123', 'Buyer'],
-            ].map(([u, p, r]) => (
-              <div key={u} style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0' }}>
-                <span><strong style={{ color: '#475569' }}>{u}</strong> / {p}</span>
-                <span style={{
-                  fontSize: '0.7rem',
-                  backgroundColor: '#f1f5f9',
-                  color: '#475569',
-                  padding: '1px 8px',
-                  borderRadius: '999px',
-                  fontWeight: 600
-                }}>{r}</span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
